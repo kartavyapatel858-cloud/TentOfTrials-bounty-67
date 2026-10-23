@@ -1,0 +1,5 @@
+{"timestamp": 123, "level": "error", "message": truncated
+[1, 2, 3]
+
+invalid random line without any structure or timestamp
+192.168.1.1 - truncated nginx

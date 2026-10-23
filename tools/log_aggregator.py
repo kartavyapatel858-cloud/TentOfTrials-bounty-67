@@ -89,7 +89,10 @@ class LogParser:
                         '%b %d %H:%M:%S',
                     ]:
                         try:
-                            dt = datetime.strptime(dt_str, fmt)
+                            if fmt == '%b %d %H:%M:%S':
+                                dt = datetime.strptime(f"{datetime.now().year} {dt_str}", f"%Y {fmt}")
+                            else:
+                                dt = datetime.strptime(dt_str, fmt)
                             return int(dt.replace(tzinfo=timezone.utc).timestamp())
                         except ValueError:
                             continue
@@ -187,7 +190,7 @@ class NginxLogParser(LogParser):
             'message': match.group(5),
             'fields': {
                 'remote_addr': match.group(1),
-                'remote_user': match.group(2),
+                'remote_user': match.group(3),
                 'request': match.group(5),
                 'status': status_code,
                 'body_bytes': match.group(7),
@@ -204,7 +207,9 @@ class NginxLogParser(LogParser):
 
 class LogAggregator:
     def __init__(self):
-        self.parsers = [JSONLogParser(), TextLogParser(), NginxLogParser()]
+        # Order matters: NginxLogParser must precede TextLogParser since TextLogParser
+        # matches any non-empty string as a generic fallback.
+        self.parsers = [JSONLogParser(), NginxLogParser(), TextLogParser()]
         self.entries: List[Dict[str, Any]] = []
         self.level_counts: Counter = Counter()
         self.service_counts: Counter = Counter()

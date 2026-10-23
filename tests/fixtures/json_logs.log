@@ -1,0 +1,3 @@
+{"timestamp": 1700000000, "level": "info", "service": "auth-service", "message": "User logged in successfully", "user_id": 42}
+{"time": 1700000010, "severity": "error", "logger": "order-book", "msg": "Insufficient liquidity for trade", "order_id": "ord-987"}
+{"@timestamp": 1700000020, "lvl": "warn", "app": "risk-engine", "event": "Margin utilization threshold reached", "margin_rate": 0.85}
