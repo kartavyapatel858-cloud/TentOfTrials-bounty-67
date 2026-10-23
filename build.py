@@ -292,15 +292,20 @@ def build_module(
     if module.name == "engine":
 
         build_type = "Release" if release else "Debug"
-        cfg_result = subprocess.run(
-            ["cmake", "-S", ".", "-B", "build",
-             f"-DCMAKE_BUILD_TYPE={build_type}"],
-            cwd=str(module.dir),
-            capture_output=True,
-            text=True,
-            timeout=120,
-            env=env,
-        )
+        try:
+            cfg_result = subprocess.run(
+                ["cmake", "-S", ".", "-B", "build",
+                 f"-DCMAKE_BUILD_TYPE={build_type}"],
+                cwd=str(module.dir),
+                capture_output=True,
+                text=True,
+                timeout=120,
+                env=env,
+            )
+        except subprocess.TimeoutExpired:
+            return False, time.time() - start, "CMake configure TIMEOUT (120s)"
+        except FileNotFoundError as e:
+            return False, 0, f"Command not found: {e}"
         if cfg_result.returncode != 0:
             return False, time.time() - start, (
                 f"CMake configure failed:\n{cfg_result.stderr}")
