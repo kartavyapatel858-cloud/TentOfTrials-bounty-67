@@ -167,8 +167,9 @@ ENV_OVERRIDES: Dict[str, Dict[str, Any]] = {
 }
 
 SENSITIVE_KEYS = [
-    "database.password", "redis.password", "auth.jwt_secret",
-    "auth.jwt_secret", "auth.jwt_secret",
+    "database.password",
+    "redis.password",
+    "auth.jwt_secret",
 ]
 
 
